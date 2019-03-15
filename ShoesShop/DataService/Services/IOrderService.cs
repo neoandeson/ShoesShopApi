@@ -14,6 +14,7 @@ namespace DataService.Services
         Order CreateOrder(OrderViewModel orderViewModel);
         Order GetOrder(int id);
         Order UpdateOrder(OrderViewModel orderViewModel);
+        List<Order> GetOrders();
         bool PutOrderDetail(OrderDetailViewModel orderDetailViewModel);
     }
 
@@ -52,6 +53,11 @@ namespace DataService.Services
         {
             Order order = _orderRepository.GetAll().Where(o => o.Id == id).Include(o => o.OrderDetail).FirstOrDefault();
             return order;
+        }
+
+        public List<Order> GetOrders()
+        {
+            return _orderRepository.GetAll().ToList();
         }
 
         public bool PutOrderDetail(OrderDetailViewModel orderDetailViewModel)

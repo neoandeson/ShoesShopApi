@@ -35,6 +35,23 @@ namespace PBSA_API.Controllers
 
         [EnableCors("AllowMyOrigin")]
         [HttpGet]
+        public IActionResult GetAllTable()
+        {
+            List<Shoes> lsShoes = _shoesService.GetAll();
+
+            List<ShoesViewModel> lsShoesVM = _mapper.Map<List<ShoesViewModel>>(lsShoes);
+
+            return new JsonResult(new
+            {
+                draw = 1,
+                recordsTotal = lsShoesVM.Count,
+                recordsFiltered = lsShoesVM.Count,
+                data = lsShoesVM
+            });
+        }
+
+        [EnableCors("AllowMyOrigin")]
+        [HttpGet]
         public List<ShoesViewModel> GetShoesByName(string name)
         {
             List<Shoes> lsShoes = _shoesService.GetShoesByName(name);

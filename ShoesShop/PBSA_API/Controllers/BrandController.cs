@@ -42,6 +42,33 @@ namespace Shoes_API.Controllers
             return new JsonResult(brandVMs) { StatusCode = StatusCodes.Status200OK};
         }
 
+        [HttpGet]
+        public IActionResult GetAllTable()
+        {
+            List<Brand> brands = _brandService.GetAllBrand();
+
+            List<BrandViewModel> brandVMs = new List<BrandViewModel>();
+            BrandViewModel brandViewModel = null;
+            foreach (var b in brands)
+            {
+                brandViewModel = new BrandViewModel()
+                {
+                    Id = b.Id,
+                    Name = b.Name
+                };
+
+                brandVMs.Add(brandViewModel);
+            }
+
+            return new JsonResult(new
+            {
+                draw = 1,
+                recordsTotal = brandVMs.Count,
+                recordsFiltered = brandVMs.Count,
+                data = brandVMs
+            });
+        }
+
         [HttpPost]
         public IActionResult CreateBrand(BrandViewModel brandViewModel)
         {

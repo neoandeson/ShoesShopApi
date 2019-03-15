@@ -35,7 +35,21 @@ namespace Shoes_API.Controllers
         //}
 
 
-        [HttpPost]
+        [HttpGet]
+        public IActionResult GetAllTable()
+        {
+            List<Order> orders = _orderService.GetOrders();
+
+            return new JsonResult(new
+            {
+                draw = 1,
+                recordsTotal = orders.Count,
+                recordsFiltered = orders.Count,
+                data = orders
+            });
+        }
+
+        [HttpGet]
         public IActionResult GetOrder(int id)
         {
             Order order = _orderService.GetOrder(id);

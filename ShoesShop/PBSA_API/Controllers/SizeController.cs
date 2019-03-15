@@ -33,6 +33,20 @@ namespace Shoes_API.Controllers
             return new JsonResult(sizes) { StatusCode = StatusCodes.Status409Conflict };
         }
 
+        [HttpGet]
+        public IActionResult GetAllTable()
+        {
+            List<Size> sizes = _sizeService.GetAllSize();
+
+            return new JsonResult(new
+            {
+                draw = 1,
+                recordsTotal = sizes.Count,
+                recordsFiltered = sizes.Count,
+                data = sizes
+            });
+        }
+
         [HttpPost]
         public IActionResult InitSize()
         {

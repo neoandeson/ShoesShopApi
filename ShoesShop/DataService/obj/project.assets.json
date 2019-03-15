@@ -3679,11 +3679,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\Study\\PRC391\\Project\\ShoesShop\\DataService\\DataService.csproj",
+      "projectUniqueName": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\DataService\\DataService.csproj",
       "projectName": "DataService",
-      "projectPath": "H:\\Study\\PRC391\\Project\\ShoesShop\\DataService\\DataService.csproj",
+      "projectPath": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\DataService\\DataService.csproj",
       "packagesPath": "C:\\Users\\TIENTP\\.nuget\\packages\\",
-      "outputPath": "H:\\Study\\PRC391\\Project\\ShoesShop\\DataService\\obj\\",
+      "outputPath": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\DataService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

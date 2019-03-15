@@ -13142,11 +13142,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\Study\\PRC391\\Project\\ShoesShop\\PBSA_API\\Shoes_API.csproj",
+      "projectUniqueName": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\PBSA_API\\Shoes_API.csproj",
       "projectName": "Shoes_API",
-      "projectPath": "H:\\Study\\PRC391\\Project\\ShoesShop\\PBSA_API\\Shoes_API.csproj",
+      "projectPath": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\PBSA_API\\Shoes_API.csproj",
       "packagesPath": "C:\\Users\\TIENTP\\.nuget\\packages\\",
-      "outputPath": "H:\\Study\\PRC391\\Project\\ShoesShop\\PBSA_API\\obj\\",
+      "outputPath": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\PBSA_API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -13165,8 +13165,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "H:\\Study\\PRC391\\Project\\ShoesShop\\DataService\\DataService.csproj": {
-              "projectPath": "H:\\Study\\PRC391\\Project\\ShoesShop\\DataService\\DataService.csproj"
+            "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\DataService\\DataService.csproj": {
+              "projectPath": "H:\\Study\\PRC391\\Project\\GIT\\ShoesShop\\DataService\\DataService.csproj"
             }
           }
         }
