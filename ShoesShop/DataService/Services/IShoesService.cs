@@ -133,7 +133,7 @@ namespace DataService.Services
 
         public Shoes GetShoesById(int id)
         {
-            Shoes shoes = _shoesRepository.GetById(id);
+            Shoes shoes = _shoesRepository.GetAll().Where(s => s.Id == id).Include(s => s.Brand).FirstOrDefault();
             return shoes;
         }
 

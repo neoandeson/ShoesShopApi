@@ -33,7 +33,6 @@ namespace PBSA_API.Controllers
             return lsShoesVM;
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpGet]
         public IActionResult GetAllTable()
         {
@@ -50,7 +49,6 @@ namespace PBSA_API.Controllers
             });
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpGet]
         public List<ShoesViewModel> GetShoesByName(string name)
         {
@@ -61,18 +59,17 @@ namespace PBSA_API.Controllers
             return lsShoesVM;
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpGet]
         public ShoesViewModel GetShoesById(int id)
         {
             Shoes shoes = _shoesService.GetShoesById(id);
 
-            ShoesViewModel lsShoesVM = _mapper.Map<ShoesViewModel>(shoes);
+            ShoesViewModel shoesVM = _mapper.Map<ShoesViewModel>(shoes);
+            shoesVM.BrandName = shoes.Brand.Name;
 
-            return lsShoesVM;
+            return shoesVM;
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpGet]
         public List<ShoesViewModel> GetShoesByBrand(string brandName)
         {
@@ -83,7 +80,6 @@ namespace PBSA_API.Controllers
             return lsShoesVM;
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpPost]
         public IActionResult AddShoes(ShoesAddViewModel shoesAddViewModel)
         {
@@ -97,7 +93,6 @@ namespace PBSA_API.Controllers
             return new JsonResult(result) { StatusCode = StatusCodes.Status409Conflict };
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpPost]
         public IActionResult Delete(int shoesId)
         {
