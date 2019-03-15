@@ -21,18 +21,18 @@ namespace Shoes_API.Controllers
             _orderService = orderService;
         }
 
-        //[HttpPost]
-        //public IActionResult CreateOrder(OrderViewModel orderViewModel)
-        //{
-        //    Order order = _orderService.CreateOrder(orderViewModel);
+        [HttpPost]
+        public IActionResult CreateOrder(OrderViewModel orderViewModel)
+        {
+            Order order = _orderService.CreateOrder(orderViewModel);
 
-        //    if (order != null)
-        //    {
-        //        return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
-        //    }
+            if (order != null)
+            {
+                return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
+            }
 
-        //    return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
-        //}
+            return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
+        }
 
 
         [HttpGet]
