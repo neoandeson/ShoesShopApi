@@ -12,7 +12,7 @@ namespace DataService.Models
 
         public int Id { get; set; }
         public string DiscountCode { get; set; }
-        public int? Discount { get; set; }
+        public double? Discount { get; set; }
         public string Description { get; set; }
         public string Event { get; set; }
 

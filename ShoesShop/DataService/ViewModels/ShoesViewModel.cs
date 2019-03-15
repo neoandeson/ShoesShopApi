@@ -7,6 +7,12 @@ namespace DataService.ViewModels
 {
     public class ShoesViewModel
     {
+        public ShoesViewModel()
+        {
+            ShoesHasSizes = new List<ShoesHasSizeViewModel>();
+            Images = new List<Image>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
@@ -16,9 +22,8 @@ namespace DataService.ViewModels
         public int Sex { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string Avatar1 { get; set; }
-        public string Avatar2 { get; set; }
 
-        public virtual ICollection<ShoesHasSizeViewModel> ShoesHasSize { get; set; }
+        public List<ShoesHasSizeViewModel> ShoesHasSizes { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

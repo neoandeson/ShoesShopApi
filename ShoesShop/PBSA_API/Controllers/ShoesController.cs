@@ -22,23 +22,18 @@ namespace PBSA_API.Controllers
             this._mapper = mapper;
         }
 
-        [EnableCors("AllowMyOrigin")]
         [HttpGet]
         public List<ShoesViewModel> GetAll()
         {
-            List<Shoes> lsShoes = _shoesService.GetAll();
+            List<ShoesViewModel> lsShoesVM = _shoesService.GetAll();
 
-            List<ShoesViewModel> lsShoesVM = _mapper.Map< List<ShoesViewModel>>(lsShoes);
-            
             return lsShoesVM;
         }
 
         [HttpGet]
         public IActionResult GetAllTable()
         {
-            List<Shoes> lsShoes = _shoesService.GetAll();
-
-            List<ShoesViewModel> lsShoesVM = _mapper.Map<List<ShoesViewModel>>(lsShoes);
+            List<ShoesViewModel> lsShoesVM = _shoesService.GetAll();
 
             return new JsonResult(new
             {
@@ -52,9 +47,7 @@ namespace PBSA_API.Controllers
         [HttpGet]
         public List<ShoesViewModel> GetShoesByName(string name)
         {
-            List<Shoes> lsShoes = _shoesService.GetShoesByName(name);
-
-            List<ShoesViewModel> lsShoesVM = _mapper.Map<List<ShoesViewModel>>(lsShoes);
+            List<ShoesViewModel> lsShoesVM = _shoesService.GetShoesByName(name);
 
             return lsShoesVM;
         }
@@ -62,10 +55,7 @@ namespace PBSA_API.Controllers
         [HttpGet]
         public ShoesViewModel GetShoesById(int id)
         {
-            Shoes shoes = _shoesService.GetShoesById(id);
-
-            ShoesViewModel shoesVM = _mapper.Map<ShoesViewModel>(shoes);
-            shoesVM.BrandName = shoes.Brand.Name;
+            ShoesViewModel shoesVM = _shoesService.GetShoesById(id);
 
             return shoesVM;
         }
@@ -73,9 +63,7 @@ namespace PBSA_API.Controllers
         [HttpGet]
         public List<ShoesViewModel> GetShoesByBrand(string brandName)
         {
-            List<Shoes> lsShoes = _shoesService.GetShoesByBrand(brandName);
-
-            List<ShoesViewModel> lsShoesVM = _mapper.Map<List<ShoesViewModel>>(lsShoes);
+            List<ShoesViewModel> lsShoesVM = _shoesService.GetShoesByBrand(brandName);
 
             return lsShoesVM;
         }

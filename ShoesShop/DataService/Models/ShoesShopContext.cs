@@ -23,6 +23,7 @@ namespace DataService.Models
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Brand> Brand { get; set; }
+        public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -37,7 +38,7 @@ namespace DataService.Models
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 //optionsBuilder.UseSqlServer("Server=DESKTOP-UH7HU37\\TIENTPSQL;Database=ShoesShop;User ID=sa;Password=1234;Trusted_Connection=True;");
-				optionsBuilder.UseSqlServer("Server=tcp:shoesshopdb.database.windows.net,1433;Initial Catalog=ShoesShopDB;Persist Security Info=False;User ID=tientp;Password=zaq@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=tcp:shoesshopdb.database.windows.net,1433;Initial Catalog=ShoesShopDB;Persist Security Info=False;User ID=tientp;Password=zaq@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -151,10 +152,15 @@ namespace DataService.Models
 
                 entity.Property(e => e.CusName).HasMaxLength(100);
 
+                entity.Property(e => e.DiscountCode).HasMaxLength(10);
+
+                entity.Property(e => e.ShipDate).HasColumnType("date");
+
                 entity.Property(e => e.State).HasMaxLength(10);
 
                 entity.HasOne(d => d.DiscountCodeNavigation)
                     .WithMany(p => p.Order)
+                    .HasPrincipalKey(p => p.DiscountCode)
                     .HasForeignKey(d => d.DiscountCode)
                     .HasConstraintName("FK_Order_Promotion");
             });
@@ -188,17 +194,21 @@ namespace DataService.Models
 
             modelBuilder.Entity<Promotion>(entity =>
             {
-                entity.Property(e => e.DiscountCode).HasMaxLength(10);
+                entity.HasIndex(e => e.DiscountCode)
+                    .HasName("IX_Promotion")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.DiscountCode)
+                    .IsRequired()
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Event).HasMaxLength(10);
             });
 
             modelBuilder.Entity<Shoes>(entity =>
             {
-                entity.Property(e => e.Avatar2).HasMaxLength(200);
-
-                entity.Property(e => e.Avatar1).HasMaxLength(200);
-
                 entity.Property(e => e.Color).HasMaxLength(50);
 
                 entity.Property(e => e.Description).HasMaxLength(100);
@@ -229,11 +239,6 @@ namespace DataService.Models
                     .HasForeignKey(d => d.SizeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ShoesHasSize_Size");
-            });
-
-            modelBuilder.Entity<Size>(entity =>
-            {
-                entity.Property(e => e.Size1).HasColumnName("Size");
             });
         }
     }

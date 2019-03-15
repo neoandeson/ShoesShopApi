@@ -11,7 +11,7 @@ namespace DataService.Models
         }
 
         public int Id { get; set; }
-        public int Size1 { get; set; }
+        public int Scale { get; set; }
 
         public virtual ICollection<ShoesHasSize> ShoesHasSize { get; set; }
     }

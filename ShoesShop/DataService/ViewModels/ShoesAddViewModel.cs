@@ -16,7 +16,5 @@ namespace DataService.ViewModels
         public int Sex { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string Avatar1 { get; set; }
-        public string Avatar2 { get; set; }
     }
 }

@@ -15,12 +15,13 @@ namespace DataService.Models
         public string Description { get; set; }
         public string State { get; set; }
         public string ShipAddress { get; set; }
-        public string ShipDate { get; set; }
+        public DateTime? ShipDate { get; set; }
         public string ContactPhone { get; set; }
         public string CusName { get; set; }
-        public int? DiscountCode { get; set; }
+        public string DiscountCode { get; set; }
         public double? Discount { get; set; }
         public double? Total { get; set; }
+        public double? Sum { get; set; }
 
         public virtual Promotion DiscountCodeNavigation { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }

@@ -11,7 +11,6 @@ namespace DataService.ViewModels
         public int ShoesId { get; set; }
         public int SizeId { get; set; }
         public int Quantity { get; set; }
-
-        public virtual Size Size { get; set; }
+        public int Scale { get; set; }
     }
 }

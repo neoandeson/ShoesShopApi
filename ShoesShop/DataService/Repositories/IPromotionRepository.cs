@@ -10,9 +10,9 @@ namespace DataService.Repositories
     {
     }
 
-    public class BarberRepository : Repository<Promotion>, IPromotionRepository
+    public class PromotionRepository : Repository<Promotion>, IPromotionRepository
     {
-        public BarberRepository(ShoesShopContext context) : base(context)
+        public PromotionRepository(ShoesShopContext context) : base(context)
         {
 
         }

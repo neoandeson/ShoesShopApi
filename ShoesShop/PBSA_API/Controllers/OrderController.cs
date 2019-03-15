@@ -22,9 +22,9 @@ namespace Shoes_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(OrderViewModel orderViewModel)
+        public IActionResult CreateOrder(OrderAddViewModel orderAddViewModel)
         {
-            Order order = _orderService.CreateOrder(orderViewModel);
+            Order order = _orderService.CreateOrder(orderAddViewModel);
 
             if (order != null)
             {
@@ -75,17 +75,17 @@ namespace Shoes_API.Controllers
             return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
         }
 
-        [HttpPost]
-        public IActionResult PutOrderDetail(OrderDetailViewModel orderDetailViewModel)
-        {
-            bool rs = _orderService.PutOrderDetail(orderDetailViewModel);
+        //[HttpPost]
+        //public IActionResult PutOrderDetail(OrderDetailViewModel orderDetailViewModel)
+        //{
+        //    bool rs = _orderService.PutOrderDetail(orderDetailViewModel);
 
-            if (rs == true)
-            {
-                return new JsonResult(rs) { StatusCode = StatusCodes.Status200OK };
-            }
+        //    if (rs == true)
+        //    {
+        //        return new JsonResult(rs) { StatusCode = StatusCodes.Status200OK };
+        //    }
 
-            return new JsonResult(rs) { StatusCode = StatusCodes.Status409Conflict };
-        }
+        //    return new JsonResult(rs) { StatusCode = StatusCodes.Status409Conflict };
+        //}
     }
 }

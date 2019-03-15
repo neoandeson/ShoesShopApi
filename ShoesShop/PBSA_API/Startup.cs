@@ -58,6 +58,8 @@ namespace PBSA_API
             services.AddTransient<IBrandRepository, BrandRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IPromotionRepository, PromotionRepository>();
 
             //Services
             services.AddTransient<IShoesService, ShoesService>();

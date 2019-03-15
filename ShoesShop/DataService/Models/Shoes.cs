@@ -19,8 +19,6 @@ namespace DataService.Models
         public string Description { get; set; }
         public int Sex { get; set; }
         public int BrandId { get; set; }
-        public string Avatar1 { get; set; }
-        public string Avatar2 { get; set; }
 
         public virtual Brand Brand { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }

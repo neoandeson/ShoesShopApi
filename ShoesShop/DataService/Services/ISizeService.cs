@@ -36,7 +36,7 @@ namespace DataService.Services
             {
                 _sizeRepository.Add(new Size()
                 {
-                    Size1 = i
+                    Scale = i
                 });
             }
         }

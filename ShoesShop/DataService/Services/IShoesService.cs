@@ -10,10 +10,10 @@ namespace DataService.Services
 {
     public interface IShoesService
     {
-        List<Shoes> GetAll();
-        List<Shoes> GetShoesByName(string input);
-        List<Shoes> GetShoesByBrand(string brandName);
-        Shoes GetShoesById(int id);
+        List<ShoesViewModel> GetAll();
+        List<ShoesViewModel> GetShoesByName(string input);
+        List<ShoesViewModel> GetShoesByBrand(string brandName);
+        ShoesViewModel GetShoesById(int id);
         bool AddShoes(ShoesAddViewModel shoesAddVM);
         bool Update(ShoesViewModel shoesVM);
         bool DeleteShoes(int id);
@@ -25,16 +25,18 @@ namespace DataService.Services
         private readonly ISizeRepository _sizeRepository;
         private readonly IShoesHasSizeRepository _shoesHasSizeRepository;
         private readonly IBrandRepository _brandRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IMapper _mapper;
 
         public ShoesService(IShoesRepository shoesRepository, ISizeRepository sizeRepository,
             IShoesHasSizeRepository shoesHasSizeRepository, IMapper mapper,
-            IBrandRepository brandRepository)
+            IBrandRepository brandRepository, IImageRepository imageRepository)
         {
             this._shoesRepository = shoesRepository;
             this._sizeRepository = sizeRepository;
             this._shoesHasSizeRepository = shoesHasSizeRepository;
             this._brandRepository = brandRepository;
+            this._imageRepository = imageRepository;
             this._mapper = mapper;
         }
 
@@ -49,8 +51,6 @@ namespace DataService.Services
                     Name = shoesVM.Name,
                     Brand = brand,
                     Color = shoesVM.Color,
-                    Avatar1 = shoesVM.Avatar1,
-                    Avatar2 = shoesVM.Avatar2,
                     IsAvaiable = true,
                     Description = shoesVM.Description,
                     Price = shoesVM.Price,
@@ -74,96 +74,185 @@ namespace DataService.Services
             return false;
         }
 
-        public List<Shoes> GetAll()
+        public List<ShoesViewModel> GetAll()
         {
             List<Shoes> lsShoes = _shoesRepository
                 .GetAll()
+                .Where(s => s.IsAvaiable == true)
                 .Include(s => s.ShoesHasSize)
                 .Include(a => a.Brand)
                 .ToList();
 
-            IEnumerable<ShoesHasSize> shoesHasSizes = _shoesHasSizeRepository
-                .GetAll()
-                .Include(s => s.Size);
-
+            List<ShoesViewModel> lsShoesVM = new List<ShoesViewModel>();
+            ShoesViewModel shoesVM = null;
+            ShoesHasSizeViewModel shoesHasSizeVM = null;
             foreach (var shoes in lsShoes)
             {
-                foreach (var sshs in shoes.ShoesHasSize)
+                shoesVM = new ShoesViewModel()
                 {
-                    foreach (var shs in shoesHasSizes)
+                    Id = shoes.Id,
+                    BrandId = shoes.BrandId,
+                    BrandName = shoes.Brand.Name,
+                    Color = shoes.Color,
+                    Name = shoes.Name,
+                    Description = shoes.Description,
+                    Price = shoes.Price,
+                    Sex = shoes.Sex
+                };
+
+                foreach (var shs in shoes.ShoesHasSize)
+                {
+                    ShoesHasSize shoesHasSize = _shoesHasSizeRepository.GetAll()
+                        .Where(h => h.Id == shs.Id).Include(h => h.Size).FirstOrDefault();
+                    shoesHasSizeVM = new ShoesHasSizeViewModel()
                     {
-                        if(sshs.Id == shs.Id)
-                        {
-                            sshs.Size = shs.Size;
-                        }
-                    }
+                        Id = shoesHasSize.Id,
+                        Quantity = shoesHasSize.Quantity,
+                        Scale = shoesHasSize.Size.Scale,
+                        ShoesId = shoesHasSize.ShoesId,
+                        SizeId = shoesHasSize.SizeId
+                    };
+                    shoesVM.ShoesHasSizes.Add(shoesHasSizeVM);
                 }
+
+                List<Image> images = _imageRepository.GetAll().Where(i => i.IsShoes == true && i.OwnId == shoes.Id).ToList();
+                shoesVM.Images = images;
+                lsShoesVM.Add(shoesVM);
             }
-            return lsShoes;
+            return lsShoesVM;
         }
 
-        public List<Shoes> GetShoesByBrand(string brandName)
+        public List<ShoesViewModel> GetShoesByBrand(string brandName)
         {
             List<Shoes> lsShoes = _shoesRepository
                 .GetAll()
-                .Where(s => s.Brand.Name == brandName)
+                .Where(s => s.IsAvaiable == true && s.Brand.Name == brandName)
                 .Include(s => s.ShoesHasSize)
                 .Include(a => a.Brand)
                 .ToList();
 
-            IEnumerable<ShoesHasSize> shoesHasSizes = _shoesHasSizeRepository
-                .GetAll()
-                .Include(s => s.Size);
-
+            List<ShoesViewModel> lsShoesVM = new List<ShoesViewModel>();
+            ShoesViewModel shoesVM = null;
+            ShoesHasSizeViewModel shoesHasSizeVM = null;
             foreach (var shoes in lsShoes)
             {
-                foreach (var sshs in shoes.ShoesHasSize)
+                shoesVM = new ShoesViewModel()
                 {
-                    foreach (var shs in shoesHasSizes)
+                    Id = shoes.Id,
+                    BrandId = shoes.BrandId,
+                    BrandName = shoes.Brand.Name,
+                    Color = shoes.Color,
+                    Name = shoes.Name,
+                    Description = shoes.Description,
+                    Price = shoes.Price,
+                    Sex = shoes.Sex
+                };
+
+                foreach (var shs in shoes.ShoesHasSize)
+                {
+                    ShoesHasSize shoesHasSize = _shoesHasSizeRepository.GetAll()
+                        .Where(h => h.Id == shs.Id).Include(h => h.Size).FirstOrDefault();
+                    shoesHasSizeVM = new ShoesHasSizeViewModel()
                     {
-                        if (sshs.Id == shs.Id)
-                        {
-                            sshs.Size = shs.Size;
-                        }
-                    }
+                        Id = shoesHasSize.Id,
+                        Quantity = shoesHasSize.Quantity,
+                        Scale = shoesHasSize.Size.Scale,
+                        ShoesId = shoesHasSize.ShoesId,
+                        SizeId = shoesHasSize.SizeId
+                    };
+                    shoesVM.ShoesHasSizes.Add(shoesHasSizeVM);
                 }
+
+                List<Image> images = _imageRepository.GetAll().Where(i => i.IsShoes == true && i.OwnId == shoes.Id).ToList();
+                shoesVM.Images = images;
+                lsShoesVM.Add(shoesVM);
             }
-            return lsShoes;
+            return lsShoesVM;
         }
 
-        public Shoes GetShoesById(int id)
+        public ShoesViewModel GetShoesById(int id)
         {
             Shoes shoes = _shoesRepository.GetAll().Where(s => s.Id == id).Include(s => s.Brand).FirstOrDefault();
-            return shoes;
+
+            ShoesHasSizeViewModel shoesHasSizeVM = new ShoesHasSizeViewModel();
+            ShoesViewModel shoesVM = new ShoesViewModel()
+            {
+                Id = shoes.Id,
+                BrandId = shoes.BrandId,
+                BrandName = shoes.Brand.Name,
+                Color = shoes.Color,
+                Name = shoes.Name,
+                Description = shoes.Description,
+                Price = shoes.Price,
+                Sex = shoes.Sex
+            };
+
+            foreach (var shs in shoes.ShoesHasSize)
+            {
+                ShoesHasSize shoesHasSize = _shoesHasSizeRepository.GetAll()
+                    .Where(h => h.Id == shs.Id).Include(h => h.Size).FirstOrDefault();
+                shoesHasSizeVM = new ShoesHasSizeViewModel()
+                {
+                    Id = shoesHasSize.Id,
+                    Quantity = shoesHasSize.Quantity,
+                    Scale = shoesHasSize.Size.Scale,
+                    ShoesId = shoesHasSize.ShoesId,
+                    SizeId = shoesHasSize.SizeId
+                };
+                shoesVM.ShoesHasSizes.Add(shoesHasSizeVM);
+            }
+
+            List<Image> images = _imageRepository.GetAll().Where(i => i.IsShoes == true && i.OwnId == shoes.Id).ToList();
+            shoesVM.Images = images;
+            return shoesVM;
         }
 
-        public List<Shoes> GetShoesByName(string input)
+        public List<ShoesViewModel> GetShoesByName(string input)
         {
             List<Shoes> lsShoes = _shoesRepository
                 .GetAll()
-                .Where(s => s.Name.Contains(input))
+                .Where(s => s.IsAvaiable == true && s.Name.Contains(input))
                 .Include(s => s.ShoesHasSize)
                 .Include(a => a.Brand)
                 .ToList();
 
-            IEnumerable<ShoesHasSize> shoesHasSizes = _shoesHasSizeRepository
-                .GetAll()
-                .Include(s => s.Size);
-
+            List<ShoesViewModel> lsShoesVM = new List<ShoesViewModel>();
+            ShoesViewModel shoesVM = null;
+            ShoesHasSizeViewModel shoesHasSizeVM = null;
             foreach (var shoes in lsShoes)
             {
-                foreach (var sshs in shoes.ShoesHasSize)
+                shoesVM = new ShoesViewModel()
                 {
-                    foreach (var shs in shoesHasSizes)
+                    Id = shoes.Id,
+                    BrandId = shoes.BrandId,
+                    BrandName = shoes.Brand.Name,
+                    Color = shoes.Color,
+                    Name = shoes.Name,
+                    Description = shoes.Description,
+                    Price = shoes.Price,
+                    Sex = shoes.Sex
+                };
+
+                foreach (var shs in shoes.ShoesHasSize)
+                {
+                    ShoesHasSize shoesHasSize = _shoesHasSizeRepository.GetAll()
+                        .Where(h => h.Id == shs.Id).Include(h => h.Size).FirstOrDefault();
+                    shoesHasSizeVM = new ShoesHasSizeViewModel()
                     {
-                        if (sshs.Id == shs.Id)
-                        {
-                            sshs.Size = shs.Size;
-                        }
-                    }
+                        Id = shoesHasSize.Id,
+                        Quantity = shoesHasSize.Quantity,
+                        Scale = shoesHasSize.Size.Scale,
+                        ShoesId = shoesHasSize.ShoesId,
+                        SizeId = shoesHasSize.SizeId
+                    };
+                    shoesVM.ShoesHasSizes.Add(shoesHasSizeVM);
                 }
+
+                List<Image> images = _imageRepository.GetAll().Where(i => i.IsShoes == true && i.OwnId == shoes.Id).ToList();
+                shoesVM.Images = images;
+                lsShoesVM.Add(shoesVM);
             }
-            return lsShoes;
+            return lsShoesVM;
         }
 
         public bool Update(ShoesViewModel shoesVM)
@@ -176,8 +265,6 @@ namespace DataService.Services
                     Name = shoesVM.Name,
                     Brand = brand,
                     Color = shoesVM.Color,
-                    Avatar1 = shoesVM.Avatar1,
-                    Avatar2 = shoesVM.Avatar2,
                     IsAvaiable = true,
                     Description = shoesVM.Description,
                     Price = shoesVM.Price,
