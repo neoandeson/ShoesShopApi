@@ -36,7 +36,8 @@ namespace DataService.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-UH7HU37\\TIENTPSQL;Database=ShoesShop;User ID=sa;Password=1234;Trusted_Connection=True;");
+                //optionsBuilder.UseSqlServer("Server=DESKTOP-UH7HU37\\TIENTPSQL;Database=ShoesShop;User ID=sa;Password=1234;Trusted_Connection=True;");
+				optionsBuilder.UseSqlServer("Server=tcp:shoesshopdb.database.windows.net,1433;Initial Catalog=ShoesShopDB;Persist Security Info=False;User ID=tientp;Password=zaq@1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
