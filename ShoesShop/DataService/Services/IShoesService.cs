@@ -58,6 +58,17 @@ namespace DataService.Services
                 };
 
                 _shoesRepository.Add(shoes);
+
+                foreach (var img in shoesVM.Images)
+                {
+                    _imageRepository.Add(new Image()
+                    {
+                        IsShoes = true,
+                        Url = img,
+                        Description = shoes.Name + "'s image",
+                        OwnId = shoes.Id
+                    });
+                }
                 return true;
             }
             return false;
