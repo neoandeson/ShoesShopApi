@@ -79,5 +79,16 @@ namespace Shoes_API.Controllers
 
             return new JsonResult(shoesHasSizeVMs) { StatusCode = StatusCodes.Status200OK };
         }
+
+        [HttpGet]
+        public IActionResult GetShoesHasSize(int id)
+        {
+            ShoesHasSizeViewModel shoesHasSizeVM = _shoesHasSizeService.GetShoesHasSize(id);
+            if (shoesHasSizeVM != null)
+            {
+                return new JsonResult(shoesHasSizeVM) { StatusCode = StatusCodes.Status200OK };
+            }
+            return new JsonResult(null) { StatusCode = StatusCodes.Status409Conflict };
+        }
     }
 }

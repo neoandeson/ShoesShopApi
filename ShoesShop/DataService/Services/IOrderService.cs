@@ -14,6 +14,7 @@ namespace DataService.Services
         Order CreateOrder(OrderAddViewModel orderViewModel);
         Order GetOrder(int id);
         Order UpdateOrder(OrderViewModel orderViewModel);
+        Order UpdateOrderState(int id, string state);
         List<Order> GetOrders();
         //bool PutOrderDetail(OrderDetailViewModel orderDetailViewModel);
     }
@@ -27,8 +28,8 @@ namespace DataService.Services
         private readonly IPromotionRepository _promotionRepository;
         private readonly IOrderDetailService _orderDetailService;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, 
-            IShoesHasSizeRepository shoesHasSizeRepository, IShoesRepository shoesRepository, 
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository,
+            IShoesHasSizeRepository shoesHasSizeRepository, IShoesRepository shoesRepository,
             IPromotionRepository promotionRepository, IOrderDetailService orderDetailService)
         {
             _orderRepository = orderRepository;
@@ -80,7 +81,7 @@ namespace DataService.Services
                         shoesHasSize.Quantity -= odd.Quantity.Value;
                         _shoesHasSizeRepository.Update(shoesHasSize);
 
-                        if(shoesHasSize.Quantity == 0)
+                        if (shoesHasSize.Quantity == 0)
                         {
                             Shoes shoes = _shoesRepository.GetById(odd.ShoesId.Value);
                             shoes.IsAvaiable = false;
@@ -169,6 +170,15 @@ namespace DataService.Services
             //order.DiscountCode = orderViewModel.DiscountCode;
             order.Discount = orderViewModel.Discount;
             order.Total = orderViewModel.Total;
+
+            order = _orderRepository.Update(order);
+            return order;
+        }
+
+        public Order UpdateOrderState(int id, string state)
+        {
+            Order order = _orderRepository.GetById(id);
+            order.State = state;
 
             order = _orderRepository.Update(order);
             return order;

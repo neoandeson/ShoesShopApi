@@ -79,6 +79,19 @@ namespace Shoes_API.Controllers
             return new JsonResult(orderVM) { StatusCode = StatusCodes.Status409Conflict };
         }
 
+        [HttpPost]
+        public IActionResult UpdateOrderState(int id, string state)
+        {
+            Order order = _orderService.UpdateOrderState(id, state);
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
+            if (order != null)
+            {
+                return new JsonResult(orderVM) { StatusCode = StatusCodes.Status200OK };
+            }
+
+            return new JsonResult(orderVM) { StatusCode = StatusCodes.Status409Conflict };
+        }
+
         //[HttpPost]
         //public IActionResult PutOrderDetail(OrderDetailViewModel orderDetailViewModel)
         //{
