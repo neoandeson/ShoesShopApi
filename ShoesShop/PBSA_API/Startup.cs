@@ -68,6 +68,7 @@ namespace PBSA_API
             services.AddTransient<IPromotionService, PromotionService>();
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<ISizeService, SizeService>();
+            services.AddTransient<IOrderDetailService, OrderDetailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

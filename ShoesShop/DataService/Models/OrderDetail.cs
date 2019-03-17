@@ -13,5 +13,6 @@ namespace DataService.Models
 
         public virtual Order Order { get; set; }
         public virtual Shoes Shoes { get; set; }
+        public virtual Size Size { get; set; }
     }
 }

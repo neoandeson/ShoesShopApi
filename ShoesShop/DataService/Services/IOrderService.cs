@@ -25,16 +25,18 @@ namespace DataService.Services
         private readonly IShoesHasSizeRepository _shoesHasSizeRepository;
         private readonly IShoesRepository _shoesRepository;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly IOrderDetailService _orderDetailService;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository,
-            IShoesHasSizeRepository shoesHasSizeRepository, IShoesRepository shoesRepository,
-            IPromotionRepository promotionRepository)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, 
+            IShoesHasSizeRepository shoesHasSizeRepository, IShoesRepository shoesRepository, 
+            IPromotionRepository promotionRepository, IOrderDetailService orderDetailService)
         {
-            this._orderRepository = orderRepository;
-            this._orderDetailRepository = orderDetailRepository;
-            this._shoesHasSizeRepository = shoesHasSizeRepository;
-            this._shoesRepository = shoesRepository;
-            this._promotionRepository = promotionRepository;
+            _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
+            _shoesHasSizeRepository = shoesHasSizeRepository;
+            _shoesRepository = shoesRepository;
+            _promotionRepository = promotionRepository;
+            _orderDetailService = orderDetailService;
         }
 
         public Order CreateOrder(OrderAddViewModel orderAddVM)
@@ -84,7 +86,8 @@ namespace DataService.Services
             order.Total = order.Sum;
             if (order.DiscountCode != "")
             {
-                order.Discount = _promotionRepository.GetAll().Where(p => p.DiscountCode == order.DiscountCode).FirstOrDefault().Discount;
+                order.Discount = _promotionRepository.GetAll()
+                    .Where(p => p.DiscountCode == order.DiscountCode).FirstOrDefault().Discount;
                 order.Total -= order.Sum * order.Discount / 100;
             }
 
@@ -103,7 +106,14 @@ namespace DataService.Services
 
         public Order GetOrder(int id)
         {
-            Order order = _orderRepository.GetAll().Where(o => o.Id == id).Include(o => o.OrderDetail).FirstOrDefault();
+            Order order = _orderRepository
+                .GetAll()
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderDetail)
+                .FirstOrDefault();
+
+            order.OrderDetail = _orderDetailService.GetOrderDetails(order.Id);
+
             return order;
         }
 

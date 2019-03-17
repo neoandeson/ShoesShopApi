@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataService.ViewModels
 {
-    public class OrderViewModel
+    public class OrderInfoViewModel
     {
         public int Id { get; set; }
         public DateTime? CreateDate { get; set; }
@@ -19,5 +19,7 @@ namespace DataService.ViewModels
         public double? Discount { get; set; }
         public double? Total { get; set; }
         public double? Sum { get; set; }
+
+        public ICollection<OrderDetailViewModel> OrderDetail { get; set; }
     }
 }

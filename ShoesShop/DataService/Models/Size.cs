@@ -7,12 +7,14 @@ namespace DataService.Models
     {
         public Size()
         {
+            OrderDetail = new HashSet<OrderDetail>();
             ShoesHasSize = new HashSet<ShoesHasSize>();
         }
 
         public int Id { get; set; }
         public int Scale { get; set; }
 
+        public virtual ICollection<OrderDetail> OrderDetail { get; set; }
         public virtual ICollection<ShoesHasSize> ShoesHasSize { get; set; }
     }
 }

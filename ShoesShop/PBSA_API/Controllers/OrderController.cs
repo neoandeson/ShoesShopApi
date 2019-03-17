@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DataService.Models;
 using DataService.Services;
 using DataService.ViewModels;
@@ -15,23 +16,26 @@ namespace Shoes_API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IMapper _mapper;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public IActionResult CreateOrder(OrderAddViewModel orderAddViewModel)
         {
             Order order = _orderService.CreateOrder(orderAddViewModel);
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
 
             if (order != null)
             {
-                return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
+                return new JsonResult(orderVM) { StatusCode = StatusCodes.Status200OK };
             }
 
-            return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
+            return new JsonResult(orderVM) { StatusCode = StatusCodes.Status409Conflict };
         }
 
 
@@ -39,13 +43,13 @@ namespace Shoes_API.Controllers
         public IActionResult GetAllTable()
         {
             List<Order> orders = _orderService.GetOrders();
-
+            List<OrderViewModel> orderVMs = _mapper.Map<List<OrderViewModel>>(orders);
             return new JsonResult(new
             {
                 draw = 1,
-                recordsTotal = orders.Count,
-                recordsFiltered = orders.Count,
-                data = orders
+                recordsTotal = orderVMs.Count,
+                recordsFiltered = orderVMs.Count,
+                data = orderVMs
             });
         }
 
@@ -53,26 +57,26 @@ namespace Shoes_API.Controllers
         public IActionResult GetOrder(int id)
         {
             Order order = _orderService.GetOrder(id);
-
+            OrderInfoViewModel orderVM = _mapper.Map<OrderInfoViewModel>(order);
             if (order != null)
             {
-                return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
+                return new JsonResult(orderVM) { StatusCode = StatusCodes.Status200OK };
             }
 
-            return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
+            return new JsonResult(orderVM) { StatusCode = StatusCodes.Status409Conflict };
         }
 
         [HttpPost]
         public IActionResult UpdateOrder(OrderViewModel orderViewModel)
         {
             Order order = _orderService.UpdateOrder(orderViewModel);
-
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
             if (order != null)
             {
-                return new JsonResult(order) { StatusCode = StatusCodes.Status200OK };
+                return new JsonResult(orderVM) { StatusCode = StatusCodes.Status200OK };
             }
 
-            return new JsonResult(order) { StatusCode = StatusCodes.Status409Conflict };
+            return new JsonResult(orderVM) { StatusCode = StatusCodes.Status409Conflict };
         }
 
         //[HttpPost]
