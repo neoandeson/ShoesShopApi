@@ -77,7 +77,13 @@ namespace Shoes_API.Controllers
         {
             List<ShoesHasSizeViewModel> shoesHasSizeVMs = _shoesHasSizeService.GetShoesHasSizes();
 
-            return new JsonResult(shoesHasSizeVMs) { StatusCode = StatusCodes.Status200OK };
+            return new JsonResult(new
+            {
+                draw = 1,
+                recordsTotal = shoesHasSizeVMs.Count,
+                recordsFiltered = shoesHasSizeVMs.Count,
+                data = shoesHasSizeVMs
+            });
         }
 
         [HttpGet]
