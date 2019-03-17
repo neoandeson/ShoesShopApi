@@ -15,7 +15,7 @@ namespace DataService.Services
         List<ShoesViewModel> GetShoesByBrand(string brandName);
         ShoesViewModel GetShoesById(int id);
         bool AddShoes(ShoesAddViewModel shoesAddVM);
-        bool Update(ShoesViewModel shoesVM);
+        bool Update(ShoesAddViewModel shoesVM);
         bool DeleteShoes(int id);
     }
 
@@ -268,24 +268,42 @@ namespace DataService.Services
             return lsShoesVM;
         }
 
-        public bool Update(ShoesViewModel shoesVM)
+        public bool Update(ShoesAddViewModel shoesVM)
         {
             Brand brand = _brandRepository.GetById(shoesVM.BrandId);
             if (brand != null)
             {
-                Shoes shoes = new Shoes()
+                Shoes shoes = _shoesRepository.GetById(shoesVM.Id);
+                if(shoes != null)
                 {
-                    Name = shoesVM.Name,
-                    Brand = brand,
-                    Color = shoesVM.Color,
-                    IsAvaiable = true,
-                    Description = shoesVM.Description,
-                    Price = shoesVM.Price,
-                    Sex = shoesVM.Sex
-                };
+                    shoes.Name = shoesVM.Name;
+                    shoes.Brand = brand;
+                    shoes.Color = shoesVM.Color;
+                    shoes.Description = shoesVM.Description;
+                    shoes.Price = shoesVM.Price;
+                    shoes.Sex = shoesVM.Sex;
 
-                _shoesRepository.Update(shoes);
-                return true;
+                    _shoesRepository.Update(shoes);
+
+                    List<Image> images = _imageRepository.GetAll().Where(i => i.IsShoes == true && i.OwnId == shoes.Id).ToList();
+                    foreach (var i in images)
+                    {
+                        _imageRepository.Delete(i);
+                    }
+
+                    foreach (var img in shoesVM.Images)
+                    {
+                        _imageRepository.Add(new Image()
+                        {
+                            IsShoes = true,
+                            Url = img,
+                            Description = shoes.Name + "'s image",
+                            OwnId = shoes.Id
+                        });
+                    }
+                    return true;
+                }
+                return false;
             }
             return false;
         }

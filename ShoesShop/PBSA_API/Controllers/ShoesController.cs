@@ -96,7 +96,7 @@ namespace PBSA_API.Controllers
 
         [EnableCors("AllowMyOrigin")]
         [HttpPost]
-        public IActionResult Update(ShoesViewModel shoesViewModel)
+        public IActionResult Update(ShoesAddViewModel shoesViewModel)
         {
             bool result = _shoesService.Update(shoesViewModel);
 
