@@ -72,8 +72,22 @@ namespace Shoes_API.Controllers
         [HttpPost]
         public IActionResult CreateBrand(BrandViewModel brandViewModel)
         {
-            Brand brands = _brandService.CreateBrand(brandViewModel);
-            return new JsonResult(brands) { StatusCode = StatusCodes.Status200OK };
+            Brand brand = _brandService.CreateBrand(brandViewModel);
+            return new JsonResult(brand) { StatusCode = StatusCodes.Status200OK };
+        }
+
+        [HttpGet]
+        public IActionResult GetBrand(int id)
+        {
+            Brand brand = _brandService.GetBrand(id);
+            return new JsonResult(brand) { StatusCode = StatusCodes.Status200OK };
+        }
+
+        [HttpPost]
+        public IActionResult UpdateBrand(BrandViewModel brandViewModel)
+        {
+            bool rs = _brandService.UpdateBrand(brandViewModel);
+            return new JsonResult(rs) { StatusCode = StatusCodes.Status200OK };
         }
     }
 }

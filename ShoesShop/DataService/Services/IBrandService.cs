@@ -12,6 +12,8 @@ namespace DataService.Services
     {
         List<Brand> GetAllBrand();
         Brand CreateBrand(BrandViewModel brandViewModel);
+        Brand GetBrand(int id);
+        bool UpdateBrand(BrandViewModel brandViewModel);
     }
 
     public class BrandService : IBrandService
@@ -37,6 +39,21 @@ namespace DataService.Services
             List<Brand> brands = _brandRepository.GetAll().ToList();
 
             return brands;
+        }
+
+        public Brand GetBrand(int id)
+        {
+            Brand brand = _brandRepository.GetById(id);
+            return brand;
+        }
+
+        public bool UpdateBrand(BrandViewModel brandViewModel)
+        {
+            Brand brand = _brandRepository.GetById(brandViewModel.Id);
+            brand.Name = brandViewModel.Name;
+
+            _brandRepository.Update(brand);
+            return true;
         }
     }
 }
