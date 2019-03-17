@@ -94,6 +94,7 @@ namespace DataService.Services
                     BrandId = shoes.BrandId,
                     BrandName = shoes.Brand.Name,
                     Color = shoes.Color,
+                    IsAvaiable = shoes.IsAvaiable,
                     Name = shoes.Name,
                     Description = shoes.Description,
                     Price = shoes.Price,
