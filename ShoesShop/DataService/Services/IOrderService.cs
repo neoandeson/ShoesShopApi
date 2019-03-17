@@ -79,6 +79,13 @@ namespace DataService.Services
                         order.Sum += price * odd.Quantity;
                         shoesHasSize.Quantity -= odd.Quantity.Value;
                         _shoesHasSizeRepository.Update(shoesHasSize);
+
+                        if(shoesHasSize.Quantity == 0)
+                        {
+                            Shoes shoes = _shoesRepository.GetById(odd.ShoesId.Value);
+                            shoes.IsAvaiable = false;
+                            _shoesRepository.Update(shoes);
+                        }
                     }
                 }
             }

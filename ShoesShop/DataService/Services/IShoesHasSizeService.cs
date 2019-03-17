@@ -13,6 +13,8 @@ namespace DataService.Services
         bool UpdateShoesSize(int shoesId, int sizeId, int quantity);
         bool TakeShoesSize(int shoesId, int sizeId, int quantity);
         bool PutShoesSize(int shoesId, int sizeId, int quantity);
+        bool AddShoesSize(int shoesId, int sizeId, int quantity);
+        List<ShoesHasSizeViewModel> GetShoesHasSizes();
     }
 
     public class ShoesHasSizeService : IShoesHasSizeService
@@ -30,6 +32,42 @@ namespace DataService.Services
             this._sizeRepository = sizeRepository;
             this._shoesHasSizeRepository = shoesHasSizeRepository;
             this._mapper = mapper;
+        }
+
+        public bool AddShoesSize(int shoesId, int sizeId, int quantity)
+        {
+            ShoesHasSize shoesHasSize = new ShoesHasSize() {
+                ShoesId = shoesId,
+                SizeId = sizeId,
+                Quantity = quantity
+            };
+
+            _shoesHasSizeRepository.Add(shoesHasSize);
+
+            return true;
+        }
+
+        public List<ShoesHasSizeViewModel> GetShoesHasSizes()
+        {
+            List<ShoesHasSize> shoesHasSizes = _shoesHasSizeRepository.GetAll().Include(s => s.Shoes).Include(s => s.Size).ToList();
+            List<ShoesHasSizeViewModel> shoesHasSizeVMs = new List<ShoesHasSizeViewModel>();
+            ShoesHasSizeViewModel shoesHasSizeVM = null;
+            foreach (var shs in shoesHasSizes)
+            {
+                shoesHasSizeVM = new ShoesHasSizeViewModel()
+                {
+                    Id = shs.Id,
+                    Quantity = shs.Quantity,
+                    Scale = shs.Size.Scale,
+                    ShoesId = shs.ShoesId,
+                    ShoesName = shs.Shoes.Name,
+                    SizeId = shs.SizeId
+                };
+
+                shoesHasSizeVMs.Add(shoesHasSizeVM);
+            }
+
+            return shoesHasSizeVMs;
         }
 
         public bool PutShoesSize(int shoesId, int sizeId, int quantity)
@@ -77,17 +115,18 @@ namespace DataService.Services
             {
                 shoesHasSize.Quantity = quantity;
                 _shoesHasSizeRepository.Update(shoesHasSize);
-                return true;
-            }
-            else if (shoesHasSize == null)
-            {
-                shoesHasSize = new ShoesHasSize()
+
+                if(quantity == 0)
                 {
-                    ShoesId = shoesId,
-                    SizeId = sizeId,
-                    Quantity = quantity
-                };
-                _shoesHasSizeRepository.Add(shoesHasSize);
+                    Shoes shoes = _shoesRepository.GetById(shoesId);
+                    shoes.IsAvaiable = false;
+                    _shoesRepository.Update(shoes);
+                } else
+                {
+                    Shoes shoes = _shoesRepository.GetById(shoesId);
+                    shoes.IsAvaiable = true;
+                    _shoesRepository.Update(shoes);
+                }
                 return true;
             }
 
