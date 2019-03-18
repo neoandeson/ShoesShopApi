@@ -27,8 +27,8 @@ namespace Shoes_API.Controllers
         [HttpPost]
         public IActionResult CreateOrder(OrderAddViewModel orderAddViewModel)
         {
-            Order order = _orderService.CreateOrder(orderAddViewModel);
-            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
+            Task<Order> order = _orderService.CreateOrderAsync(orderAddViewModel);
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order.Result);
 
             if (order != null)
             {

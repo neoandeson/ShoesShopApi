@@ -6,12 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using DataService.ViewModels;
 using AutoMapper;
 using System;
+using DataService.Infrastructure;
+using System.Threading.Tasks;
 
 namespace DataService.Services
 {
     public interface IOrderService
     {
-        Order CreateOrder(OrderAddViewModel orderViewModel);
+        Task<Order> CreateOrderAsync(OrderAddViewModel orderViewModel);
         Order GetOrder(int id);
         Order UpdateOrder(OrderViewModel orderViewModel);
         Order UpdateOrderState(int id, string state);
@@ -27,10 +29,12 @@ namespace DataService.Services
         private readonly IShoesRepository _shoesRepository;
         private readonly IPromotionRepository _promotionRepository;
         private readonly IOrderDetailService _orderDetailService;
+        private readonly IMapper _mapper;
 
         public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository,
             IShoesHasSizeRepository shoesHasSizeRepository, IShoesRepository shoesRepository,
-            IPromotionRepository promotionRepository, IOrderDetailService orderDetailService)
+            IPromotionRepository promotionRepository, IOrderDetailService orderDetailService,
+            IMapper mapper)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -38,9 +42,10 @@ namespace DataService.Services
             _shoesRepository = shoesRepository;
             _promotionRepository = promotionRepository;
             _orderDetailService = orderDetailService;
+            _mapper = mapper;
         }
 
-        public Order CreateOrder(OrderAddViewModel orderAddVM)
+        public async Task<Order> CreateOrderAsync(OrderAddViewModel orderAddVM)
         {
             Order order = new Order()
             {
@@ -107,6 +112,10 @@ namespace DataService.Services
             else
             {
                 order = _orderRepository.Update(order);
+
+                OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
+                FirebaseSerivce<OrderViewModel> firebaseSerivce = new FirebaseSerivce<OrderViewModel>();
+                await firebaseSerivce.SetDataAsync("orders", orderVM);
             }
 
             return order;
