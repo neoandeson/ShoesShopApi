@@ -82,8 +82,8 @@ namespace Shoes_API.Controllers
         [HttpPost]
         public IActionResult UpdateOrderState(int id, string state)
         {
-            Order order = _orderService.UpdateOrderState(id, state);
-            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
+            Task<Order> order = _orderService.UpdateOrderState(id, state);
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order.Result);
             if (order != null)
             {
                 return new JsonResult(orderVM) { StatusCode = StatusCodes.Status200OK };

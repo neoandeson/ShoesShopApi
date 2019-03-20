@@ -16,7 +16,7 @@ namespace DataService.Services
         Task<Order> CreateOrderAsync(OrderAddViewModel orderViewModel);
         Order GetOrder(int id);
         Order UpdateOrder(OrderViewModel orderViewModel);
-        Order UpdateOrderState(int id, string state);
+        Task<Order> UpdateOrderState(int id, string state);
         List<Order> GetOrders();
         //bool PutOrderDetail(OrderDetailViewModel orderDetailViewModel);
     }
@@ -112,7 +112,6 @@ namespace DataService.Services
             else
             {
                 order = _orderRepository.Update(order);
-
                 OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
                 FirebaseSerivce<OrderViewModel> firebaseSerivce = new FirebaseSerivce<OrderViewModel>();
                 await firebaseSerivce.SetDataAsync("orders", orderVM);
@@ -184,12 +183,15 @@ namespace DataService.Services
             return order;
         }
 
-        public Order UpdateOrderState(int id, string state)
+        public async Task<Order> UpdateOrderState(int id, string state)
         {
             Order order = _orderRepository.GetById(id);
             order.State = state;
 
             order = _orderRepository.Update(order);
+            OrderViewModel orderVM = _mapper.Map<OrderViewModel>(order);
+            FirebaseSerivce<OrderViewModel> firebaseSerivce = new FirebaseSerivce<OrderViewModel>();
+            await firebaseSerivce.SetDataAsync("huuthien", orderVM);
             return order;
         }
     }
