@@ -41,5 +41,10 @@ namespace DataService.Infrastructure
 
             Console.WriteLine(string.Format("Post Async Data to key({0}) = {1}", result.Key, result.Object));
         }
+
+        public async Task PutDataAsync(string key, T data)
+        {
+            await this.Firebase.Child(key).PutAsync(JsonConvert.SerializeObject(data));
+        }
     }
 }
