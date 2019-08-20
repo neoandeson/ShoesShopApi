@@ -22,9 +22,10 @@ namespace Shoes_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Open()
+        public IActionResult Pull()
         {
-            var str1 = "Hello Door";
+            var str = "Pull Glass";
+
             return new JsonResult(null) { StatusCode = StatusCodes.Status200OK };
         }
 
