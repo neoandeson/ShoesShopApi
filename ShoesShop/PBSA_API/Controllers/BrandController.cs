@@ -22,6 +22,14 @@ namespace Shoes_API.Controllers
         }
 
         [HttpGet]
+        public IActionResult Pull()
+        {
+            var str = "Pull Glass";
+
+            return new JsonResult(null) { StatusCode = StatusCodes.Status200OK };
+        }
+
+        [HttpGet]
         public IActionResult GetAllBrand()
         {
             List<Brand> brands = _brandService.GetAllBrand();
