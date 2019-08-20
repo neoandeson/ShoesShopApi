@@ -24,7 +24,7 @@ namespace Shoes_API.Controllers
         [HttpGet]
         public IActionResult Open()
         {
-            var str1 = "Hello Door";
+            var str2 = "Open door";
             return new JsonResult(null) { StatusCode = StatusCodes.Status200OK };
         }
 
