@@ -29,6 +29,13 @@ namespace Shoes_API.Controllers
         }
 
         [HttpGet]
+        public IActionResult CloseDoor()
+        {
+            string str1 = "Close door";
+            return new JsonResult(str1) { StatusCode = StatusCodes.Status200OK };
+        }
+
+        [HttpGet]
         public IActionResult GetAllBrand()
         {
             List<Brand> brands = _brandService.GetAllBrand();
