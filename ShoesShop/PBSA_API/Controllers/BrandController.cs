@@ -96,5 +96,12 @@ namespace Shoes_API.Controllers
             bool rs = _brandService.UpdateBrand(brandViewModel);
             return new JsonResult(rs) { StatusCode = StatusCodes.Status200OK };
         }
+
+        [HttpPost]
+        public IActionResult CleanGlass()
+        {
+            string str = "Clean";
+            return new JsonResult(str) { StatusCode = StatusCodes.Status200OK };
+        }
     }
 }
