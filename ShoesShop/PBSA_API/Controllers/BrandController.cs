@@ -110,5 +110,12 @@ namespace Shoes_API.Controllers
             string str = "Clean";
             return new JsonResult(str) { StatusCode = StatusCodes.Status200OK };
         }
+
+        [HttpPost]
+        public IActionResult OpenGlass()
+        {
+            string str = "Open glass";
+            return new JsonResult(str) { StatusCode = StatusCodes.Status200OK };
+        }
     }
 }
